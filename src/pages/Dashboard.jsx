@@ -1,8 +1,8 @@
-import { Button, Flex, Heading, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, useDisclosure } from '@chakra-ui/react';
+import { Button, Flex, Heading, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, useDisclosure, useToast } from '@chakra-ui/react';
 import { useEffect, useState } from 'react'
 
 function Dashboard() {
-
+  const toast = useToast();
   const [localData, setLocalData] = useState([]);
   const [userName, setUserName] = useState('');
   const [url, setUrl] = useState('');
@@ -24,28 +24,63 @@ function Dashboard() {
   }, []);
 
   const handleSaveData = () => {
-    const options = {
-      timeZone: 'Asia/Kolkata',
-      hour12: false,
-    };
-    const IST_Date_Time = new Date().toLocaleString('en-US', options);
-    setDate(IST_Date_Time);
+    if (!userName || !url || !author) {
+      let errorMessage = null;
 
-    // Game object :
-    const data = {
-      id: Math.random(),
-      name: userName,
-      url: url,
-      author: author,
-      published_date: IST_Date_Time,
-    };
+      if (!userName) {
+        errorMessage = "Please enter the game name!";
+      } else if (!url) {
+        errorMessage = "Please enter the game url";
+      } else if (!author) {
+        errorMessage = "Please enter author name!";
+      }
 
-    setLocalData([...localData, data]);
-    localStorage.setItem('gameData', JSON.stringify([...localData, data]));
+      if (errorMessage) {
+        toast({
+          title: errorMessage,
+          variant: "left-accent",
+          position: "top",
+          isClosable: true,
+          duration: 2000,
+          status: "error",
+        });
+        return;
+      }
+    } else {
 
-    setUserName('');
-    setUrl('');
-    setAuthor('');
+      const options = {
+        timeZone: 'Asia/Kolkata',
+        hour12: false,
+      };
+      const IST_Date_Time = new Date().toLocaleString('en-US', options);
+      setDate(IST_Date_Time);
+
+      // Game object :
+      const data = {
+        id: Math.random(),
+        name: userName,
+        url: url,
+        author: author,
+        published_date: IST_Date_Time,
+      };
+
+      setLocalData([...localData, data]);
+      localStorage.setItem('gameData', JSON.stringify([...localData, data]));
+
+      setUserName('');
+      setUrl('');
+      setAuthor('');
+
+      toast({
+        title: "Game created successfully!",
+        variant: "left-accent",
+        position: "top",
+        isClosable: true,
+        duration: 2000,
+        status: "success",
+      });
+    }
+
   };
 
   const openModal = (item) => {
