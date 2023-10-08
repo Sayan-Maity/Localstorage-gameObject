@@ -1,7 +1,8 @@
-import { Button, Flex, Heading, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, useDisclosure, useToast } from '@chakra-ui/react';
+import { Button, Flex, Heading, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, useDisclosure, useTheme, useToast } from '@chakra-ui/react';
 import { useEffect, useState } from 'react'
 
 function Dashboard() {
+  const theme = useTheme()
   const toast = useToast();
   const [localData, setLocalData] = useState([]);
   const [userName, setUserName] = useState('');
@@ -120,6 +121,15 @@ function Dashboard() {
     setLocalData(filteredData);
 
     localStorage.setItem('gameData', JSON.stringify(filteredData));
+
+    toast({
+      title: "Game deleted successfully!",
+      variant: "left-accent",
+      position: "top",
+      isClosable: true,
+      duration: 2000,
+      status: "success",
+    });
   };
 
 
@@ -150,17 +160,79 @@ function Dashboard() {
             onChange={(e) => setAuthor(e.target.value)}
             _focus={{ borderColor: "#8b3dff", boxShadow: "none" }}
           />
-          <Button onClick={handleSaveData}>Create</Button>
+          <Button onClick={handleSaveData}
+            gap="0.5rem"
+            borderRadius="20px"
+            transition={"all 0.3s ease"}
+            color={theme.colors.button.dark_color}
+            backgroundColor={theme.colors.button.dark_backgroundColor}
+            _hover={{
+              backgroundColor: `${theme.colors.button.hover_dark_backgroundColor}`,
+              transform: `${theme.colors.button.hover_transform}`,
+            }}
+            _active={{
+              backgroundColor: `${theme.colors.button.active_dark_backgroundColor}`,
+            }}
+          >
+            Create
+          </Button>
         </Flex>
         <Flex gap="1rem" flexDir="column" p="3rem">
           <Heading>View all Games</Heading>
           <Flex gap="1rem" flexDir="row" flexWrap="wrap" >
-            {localData.length === 0 ? ("No Data Found") : (localData.map((item) => (
-              <Flex cursor="pointer" h="fit-content" border="1px solid #bebebe" p="2rem" borderRadius="10px" key={item.id}>
-                <span >{item.name}</span>
-                <Button onClick={() => handleDeleteItem(item.id)}>Delete</Button>
-                <Button onClick={() => { onOpen(); openModal(item); }} >Edit</Button>
-                <Button onClick={() => { onOpenSecond(); openModalSecond(item); }} >View</Button>
+            {localData.length === 0 ? ("No Games Found, please create one !") : (localData.map((item) => (
+              <Flex flexDir="column" cursor="pointer" h="fit-content" border="1px solid #bebebe" p="2rem" borderRadius="10px" key={item.id} alignItems="center" gap="1rem">
+                <Text >{item.name}</Text>
+                <Flex gap="1rem">
+                  <Button onClick={() => handleDeleteItem(item.id)}
+                    gap="0.5rem"
+                    borderRadius="20px"
+                    transition={"all 0.3s ease"}
+                    color={theme.colors.button.dark_color}
+                    backgroundColor={theme.colors.button.dark_backgroundColor}
+                    _hover={{
+                      backgroundColor: `${theme.colors.button.hover_dark_backgroundColor}`,
+                      transform: `${theme.colors.button.hover_transform}`,
+                    }}
+                    _active={{
+                      backgroundColor: `${theme.colors.button.active_dark_backgroundColor}`,
+                    }}
+                  >
+                    Delete
+                  </Button>
+                  <Button onClick={() => { onOpen(); openModal(item); }}
+                    gap="0.5rem"
+                    borderRadius="20px"
+                    transition={"all 0.3s ease"}
+                    color={theme.colors.button.dark_color}
+                    backgroundColor={theme.colors.button.dark_backgroundColor}
+                    _hover={{
+                      backgroundColor: `${theme.colors.button.hover_dark_backgroundColor}`,
+                      transform: `${theme.colors.button.hover_transform}`,
+                    }}
+                    _active={{
+                      backgroundColor: `${theme.colors.button.active_dark_backgroundColor}`,
+                    }}
+                  >
+                    Edit
+                  </Button>
+                  <Button onClick={() => { onOpenSecond(); openModalSecond(item); }}
+                    gap="0.5rem"
+                    borderRadius="20px"
+                    transition={"all 0.3s ease"}
+                    color={theme.colors.button.dark_color}
+                    backgroundColor={theme.colors.button.dark_backgroundColor}
+                    _hover={{
+                      backgroundColor: `${theme.colors.button.hover_dark_backgroundColor}`,
+                      transform: `${theme.colors.button.hover_transform}`,
+                    }}
+                    _active={{
+                      backgroundColor: `${theme.colors.button.active_dark_backgroundColor}`,
+                    }}
+                  >
+                    View
+                  </Button>
+                </Flex>
               </Flex>
             )))}
           </Flex>
@@ -196,7 +268,22 @@ function Dashboard() {
             />
           </ModalBody>
           <ModalFooter >
-            <Button onClick={() => { handleUpdateData(); onClose(); }}>Update</Button>
+            <Button onClick={() => { handleUpdateData(); onClose(); }}
+              gap="0.5rem"
+              borderRadius="20px"
+              transition={"all 0.3s ease"}
+              color={theme.colors.button.dark_color}
+              backgroundColor={theme.colors.button.dark_backgroundColor}
+              _hover={{
+                backgroundColor: `${theme.colors.button.hover_dark_backgroundColor}`,
+                transform: `${theme.colors.button.hover_transform}`,
+              }}
+              _active={{
+                backgroundColor: `${theme.colors.button.active_dark_backgroundColor}`,
+              }}
+            >
+              Update
+            </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
